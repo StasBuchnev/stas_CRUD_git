@@ -4,17 +4,15 @@ import com.stas.stas_CRUD.entity.User;
 import com.stas.stas_CRUD.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Path;
 import java.util.List;
 
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/user-service", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/user-service")
 public class UserController {
 
     private final UserService userService;
@@ -35,6 +33,24 @@ public class UserController {
     public ResponseEntity<List<User>> getUserByAll() {
         var user = userService.getAllUser();
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/create/user", method = RequestMethod.POST)
+    public ResponseEntity<User> createNewUser(@RequestBody User user) {
+        return new ResponseEntity<>(userService.saveUser(user), HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteById(@PathVariable("id") Integer id) {
+        userService.deleteUserByID(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public ResponseEntity<User> update(@RequestBody User user) {
+        var update = userService.updateUser(user);
+        return new ResponseEntity<>(update, HttpStatus.OK);
     }
 
 

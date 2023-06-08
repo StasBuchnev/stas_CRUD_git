@@ -10,16 +10,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private static int count = 4;
+    private static int count = 1;
     private static ConcurrentHashMap<Integer, User> userMap = new ConcurrentHashMap<>();
-
-
-    private void initUserMap() {
-        userMap.put(1, new User(1, "Masha", "Mariya", (byte) 20));
-        userMap.put(2, new User(2, "Katya", "Petrova", (byte) 20));
-        userMap.put(3, new User(3, "Vi", "Cyper", (byte) 26));
-
-    }
 
     @Override
     public User getUserByID(Integer id) {
@@ -34,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user) {
-
+        user.setId(count);
         userMap.put(count, user);
         count = count + 1;
         return getUserByID(count - 1);
@@ -42,10 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User user) {
-        var userFromMap = getUserByID(user.getId());
-        userFromMap.setName(user.getName());
-        userFromMap.setFirstName(user.getFirstName());
-        userFromMap.setAge(user.getAge());
+        userMap.put(user.getId(), user);
         return user;
     }
 
