@@ -3,7 +3,9 @@ package com.stas.stas_CRUD.controller;
 import com.stas.stas_CRUD.entity.User;
 import com.stas.stas_CRUD.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,6 +38,4 @@ public class UserController {
         var user = userService.getAllUser();
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-
-
 }

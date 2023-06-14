@@ -4,11 +4,10 @@ import com.stas.stas_CRUD.entity.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-@Service
+@Service()
 public class UserServiceImpl implements UserService {
     private static int count = 4;
     private static ConcurrentHashMap<Integer, User> userMap = new ConcurrentHashMap<>();
