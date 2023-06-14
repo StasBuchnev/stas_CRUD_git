@@ -6,8 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -17,23 +16,36 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByID(Integer id) {
-        return userRepository.findById(id).orElse(new User());
+        return userRepository.findById(id).orElse(null);
     }
 
-    @Override
     public User saveUser(User user) {
-        var newUser = userRepository.save(user);
-        return newUser;
-    }
+        User result;
 
-    @Override
-    public User updateUser(User user) {
-        return userRepository.save(user);
+        var userId = user.getId();
+
+        if (Objects.nonNull(userId) && userId != 0) {
+            result = user;
+
+            userRepository.save(result);
+
+            System.out.println(String.format("Данные пользователя с id: %d обновлены!",
+                    user.getId()));
+        } else {
+            result = userRepository.save(user);
+
+            System.out.println(String.format("Новый пользовател с id: %d создан!",
+                    result.getId()));
+        }
+
+        return result;
     }
 
     @Override
     public void deleteUserByID(Integer id) {
         userRepository.deleteById(id);
+
+        System.out.println(String.format("Пользователь с id: %d удален!", id));
     }
 
     @Override

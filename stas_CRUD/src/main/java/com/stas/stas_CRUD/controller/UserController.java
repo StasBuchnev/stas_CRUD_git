@@ -3,11 +3,12 @@ package com.stas.stas_CRUD.controller;
 import com.stas.stas_CRUD.entity.User;
 import com.stas.stas_CRUD.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
 
 @RestController
@@ -23,6 +24,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         var user = userService.getUserByID(id);
+
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -35,8 +37,8 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/create/user", method = RequestMethod.POST)
-    public ResponseEntity<User> createNewUser(@RequestBody User user) {
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public ResponseEntity<User> createUser(@RequestBody User user) {
         return new ResponseEntity<>(userService.saveUser(user), HttpStatus.CREATED);
     }
 
@@ -46,12 +48,13 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseEntity<User> update(@RequestBody User user) {
-        var update = userService.updateUser(user);
-        return new ResponseEntity<>(update, HttpStatus.OK);
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+
+        if (Objects.isNull(user.getId())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(userService.saveUser(user), HttpStatus.OK);
     }
-
-
 }
