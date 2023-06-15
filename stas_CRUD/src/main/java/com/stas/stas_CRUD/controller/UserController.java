@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
 
 @RestController
@@ -49,9 +50,10 @@ public class UserController {
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<User> update(@RequestBody User user) {
-        var update = userService.updateUser(user);
+        if (Objects.isNull(user.getId())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        var update = userService.saveUser(user);
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
-
-
 }
